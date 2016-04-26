@@ -16,6 +16,14 @@
 #define DEFAULT_ARRAY_SIZE 1024
 
 
+
+#define max(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+      __typeof__ (b) _b = (b); \
+      _a > _b ? _a : _b; })
+
+
+
 typedef struct chunk chunk_t;
 typedef struct chpool chpool_t;
 

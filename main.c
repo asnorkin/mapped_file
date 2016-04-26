@@ -12,25 +12,8 @@ int main(void)
     int error = 0;
     error = log_set_default_loglvl(INFO);
 
-    int flags = O_RDWR;
-    int perms = 0666;
-    int prot = (flags & O_RDWR) ? PROT_READ | PROT_WRITE :
-               (flags & O_RDONLY) ? PROT_READ : PROT_WRITE;
-    int fd = open("test.txt", flags, perms);
-
     printf("Start testing\n");
 
-
-
-    /*chpool_t *chpl = chp_init(fd, prot);
-    if(!chpl)
-        printf("can't init chunk pool\n");
-
-    dcl_print(chpl->free_list);
-
-    chunk_t *chunk = ch_init(1, 1, chpl);
-    if(!chunk)
-        printf("can't init chunk\n");*/
 
     mf_handle_t mf = mf_open("test.txt");
     if(mf == MF_OPEN_FAILED)
@@ -39,21 +22,37 @@ int main(void)
     log_set_default_loglvl(DEBUG);
 
     mf_mapmem_handle_t *mapmem = (mf_mapmem_handle_t *)calloc(1, sizeof(mf_mapmem_handle_t));
-    void *ptr = mf_map(mf, 4, 5, mapmem);
+    void *ptr = mf_map(mf, 0, 10000, mapmem);
     if(!ptr)
         printf("can't map memory\n");
     else
     {
         int i = 0;
-        while(((char *)ptr)[i] != EOF)
-            printf("%c ", ((char *)ptr)[i++]);
+        for(int i = 0; i < 12289; i++)
+            printf("%c ", ((char *)ptr)[i]);
+
+        printf("\n");
     }
 
+    error = mf_unmap(mf, *mapmem);
+    if(error)
+        printf("can't unmap memory: error=%d\n", error);
+    /*else  //  This attempt is failed
+    {
+        printf("unmapping success\ntrying to get unmapped memory\n");
+        int i = 0;
+        while(((char *)ptr)[i] != EOF)
+            printf("%c ", ((char *)ptr)[i++]);
 
+        printf("\n");
+    }*/
 
+    printf("mf_read tests\n");
 
-
-
+    void *buf = (void *)calloc(10, sizeof(char));
+    int readed_bytes = mf_read(mf, buf, 10, 0);
+    for(int i = 0; i < readed_bytes; i++)
+        printf("%c ", ((char *)buf)[i]);
 
 
 

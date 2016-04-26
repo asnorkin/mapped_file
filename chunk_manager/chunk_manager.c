@@ -204,13 +204,19 @@ int chp_chunk_release(chunk_t *chunk)
     log_write(DEBUG, "chp_chunk_release: started");
 
     if(chunk->rc == 0)
+    {
+        log_write(WARNING, "chp_chunk_release: trying to release chunk with zero rc");
         return EAGAIN;
+    }
 
     if(--chunk->rc == 0)
     {
         int error = munmap(chunk->data, get_chunk_size(chunk->len));
         if(error == -1)
-                return errno;
+        {
+            log_write(WARNING, "chp_chunk_release: can't unmap memory");
+            return errno;
+        }
 
         chunk->rc = 0;
         chunk->len = 0;
@@ -220,11 +226,17 @@ int chp_chunk_release(chunk_t *chunk)
         error = ht_del_item_by_kav(chunk->chpool->ht,
                                    (hkey_t)chunk->index, (hvalue_t)chunk);
         if(error)
+        {
+            log_write(WARNING, "chp_chunk_release: can't delete chunk from hash table");
             return error;
+        }
 
         error = dcl_add_last(chunk->chpool->free_list, (lvalue_t)chunk);
         if(error)
+        {
+            log_write(WARNING, "chp_chunk_release: can't add chunk to free list");
             return error;
+        }
     }
 
     log_write(DEBUG, "chp_chunk_release: finished");
