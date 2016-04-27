@@ -169,6 +169,8 @@ int chp_find(chpool_t *chpool, off_t index, off_t len, chunk_t **chunk)
     if(!chpool)
         return EINVAL;
 
+    log_write(DEBUG, "chp_find(index=%d, len=%d): started", index, len);
+
     hkey_t key = (hkey_t)index;
 
     int idx = chpool->ht->hash_func(key, HASH_CONST_2) % chpool->ht->size;
@@ -190,6 +192,8 @@ int chp_find(chpool_t *chpool, off_t index, off_t len, chunk_t **chunk)
             continue;
         }
     }
+
+    log_write(DEBUG, "chp_find(index=%d, len=%d): finished", index, len);
 
     return ENOKEY;
 }
@@ -227,14 +231,16 @@ int chp_chunk_release(chunk_t *chunk)
                                    (hkey_t)chunk->index, (hvalue_t)chunk);
         if(error)
         {
-            log_write(WARNING, "chp_chunk_release: can't delete chunk from hash table");
+            log_write(WARNING, "chp_chunk_release: can't delete chunk from hash table, error=%d",
+                      error);
             return error;
         }
 
         error = dcl_add_last(chunk->chpool->free_list, (lvalue_t)chunk);
         if(error)
         {
-            log_write(WARNING, "chp_chunk_release: can't add chunk to free list");
+            log_write(WARNING, "chp_chunk_release: can't add chunk to free list, error=%d",
+                      error);
             return error;
         }
     }

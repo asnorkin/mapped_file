@@ -32,6 +32,10 @@ typedef unsigned int uint32_t;
 
 
 
+typedef hkey_t hfunc_t(const hvalue_t,  uint32_t);
+
+
+
 //  This func generates uint32 hash key by uint32 key
 //
 //  - ARGUMENTS
@@ -40,7 +44,7 @@ typedef unsigned int uint32_t;
 //
 //  - RETURNED VALUE
 //      all is good => hash key
-hkey_t hash_fnv1a(const hvalue_t key, uint32_t hash);
+hkey_t hash_fnv1a(const hkey_t key, uint32_t hash);
 
 //  This func calculates the uint32 hash key by one byte
 //  Assistance func for hash_fnv1a

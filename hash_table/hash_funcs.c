@@ -1,7 +1,7 @@
 #include "hash_funcs.h"
 
 
-hkey_t hash_fnv1a(const hvalue_t key, uint32_t hash)
+hkey_t hash_fnv1a(const hkey_t key, uint32_t hash)
 {
     const unsigned char* ptr = (const unsigned char*) &key;
     hash = fnv1a(*ptr++, hash);

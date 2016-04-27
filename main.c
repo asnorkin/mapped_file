@@ -27,16 +27,17 @@ int main(void)
         printf("can't map memory\n");
     else
     {
-        int i = 0;
         for(int i = 0; i < 12289; i++)
             printf("%c ", ((char *)ptr)[i]);
 
         printf("\n");
     }
 
-    error = mf_unmap(mf, *mapmem);
+    /*error = mf_unmap(mf, *mapmem);
     if(error)
-        printf("can't unmap memory: error=%d\n", error);
+        printf("can't unmap memory: error=%d\n", error);*/
+
+
     /*else  //  This attempt is failed
     {
         printf("unmapping success\ntrying to get unmapped memory\n");
@@ -49,11 +50,26 @@ int main(void)
 
     printf("mf_read tests\n");
 
-    void *buf = (void *)calloc(10, sizeof(char));
-    int readed_bytes = mf_read(mf, buf, 10, 0);
+    void *buf = (void *)calloc(100, sizeof(char));
+    int readed_bytes = mf_read(mf, buf, 5, 0);
     for(int i = 0; i < readed_bytes; i++)
         printf("%c ", ((char *)buf)[i]);
+    printf("\n");
 
+    readed_bytes = mf_read(mf, buf, 50, 0);
+    for(int i = 0; i < readed_bytes; i++)
+        printf("%c ", ((char *)buf)[i]);
+    printf("\n");
+
+    readed_bytes = mf_read(mf, buf, 7, 100);
+    for(int i = 0; i < readed_bytes; i++)
+        printf("%c ", ((char *)buf)[i]);
+    printf("\n");
+
+    readed_bytes = mf_read(mf, buf, 100, 10000);
+    for(int i = 0; i < readed_bytes; i++)
+        printf("%c ", ((char *)buf)[i]);
+    printf("\n");
 
 
 

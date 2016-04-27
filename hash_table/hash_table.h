@@ -13,10 +13,6 @@
 
 
 
-typedef hkey_t hfunc_t(const hvalue_t,  uint32_t);
-
-
-
 typedef struct item item_t;
 typedef struct hash_table htable_t;
 
@@ -165,7 +161,7 @@ int ht_del_item_by_kav(htable_t *ht, hkey_t key, hvalue_t value);
 //
 //  - RETURNED VALUE
 //      no value
-void print_table(htable_t *ht);
+void ht_print_table(htable_t *ht);
 
 
 
@@ -180,7 +176,7 @@ void print_table(htable_t *ht);
 //      all is good => number of items by that index
 //      hash_table pointer is NULL => EINVAL
 //      index more than size of the table => EINVAL
-int number_of_items_in_index(htable_t *ht, int index);
+int ht_number_of_items_in_index(htable_t *ht, int index);
 
 
 
@@ -196,7 +192,7 @@ int number_of_items_in_index(htable_t *ht, int index);
 //      ht is NULL => EINVAL
 //      index is out of array => EINVAL
 //      something else => -1
-int print_list_in_index(htable_t *ht, int index);
+int ht_print_list_in_index(htable_t *ht, int index);
 
 
 #endif // HASH_TABLE_H
