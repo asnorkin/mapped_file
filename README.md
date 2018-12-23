@@ -13,10 +13,10 @@ Library provides basic functions for working with file (open, close, read, write
 // Open Parallels VM image file that has 100 GB size
 mf_handle_t mf = mf_open('win10_image.pvm');
 
-// Create buffer where we will map part of file
+// Create buffer with 1KB size where we will map part of file
 mf_mapmem_handle_t *buf = (mf_mapmem_handle_t *)calloc(1000, 1);
 
-// Map part of file into memory
+// Map first 1KB of file into memory
 void *data = mf_map(mf, 0, 1000, buf);
 
 // Do something
