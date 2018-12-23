@@ -10,6 +10,8 @@ Library provides basic functions for working with file (open, close, read, write
 
 ### Usage
 ```
+#include "mapped_file.h"
+
 // Open Parallels VM image file that has 100 GB size
 mf_handle_t mf = mf_open('win10_image.pvm');
 
